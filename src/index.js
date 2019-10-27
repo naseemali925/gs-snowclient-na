@@ -4,8 +4,9 @@ import './index.css';
 import 'typeface-roboto';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
-ReactDOM.render(<App />, document.getElementById('root'));
+import GlobalState from './services/GlobalState'
+const globalState = new GlobalState(false);
+ReactDOM.render(<App globalState={globalState} />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

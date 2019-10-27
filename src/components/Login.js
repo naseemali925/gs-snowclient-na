@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import ButtonAppBar from './ButtonAppBar'
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
@@ -26,11 +27,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Login() {
+export default function Login(props) {
   const classes = useStyles();
-
+  const [loading, setLoading] = useState(false);
+  let loggedIn = props.globalState.isLoggedIn();
+  if (loggedIn) props.history.push('/dashboard');
   async function handleClick(e) {
     e.preventDefault();
+    setLoading(true);
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
     let instanceId = document.getElementById('instanceId').value;
@@ -44,12 +48,21 @@ export default function Login() {
         }
       };
       axios(options).then((val) => {
+        setLoading(false)
         var res = {
           raw: val,
           status: val.status
         }
+        if (val.status === 200) {
+          props.globalState.setLoggedIn(true);
+          props.globalState.username = username;
+          props.globalState.password = password;
+          props.globalState.instance = instanceId;
+          props.history.push('/dashboard')
+        }
         console.log('Authenticated', res);
       }, (rej) => {
+        setLoading(false)
         console.log(rej);
       });
     } catch (e) {
@@ -103,10 +116,14 @@ export default function Login() {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={12} style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <Button style={{ width: "100%", margin: '0' }} variant="contained" color="primary" size="large" className={classes.button} onClick={handleClick}>
+            <Grid item xs={12} style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+              <Button style={{ width: "100%", margin: '0' }} disabled={loading ? "disabled" : ""} variant="contained" color="primary" size="large" className={classes.button} onClick={handleClick}>
                 Login
             </Button>
+              {loading ?
+                <LinearProgress variant="query" style={{ width: "100%", margin: '0' }} />
+                : ""
+              }
             </Grid>
           </Grid>
         </Paper>
