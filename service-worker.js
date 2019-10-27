@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/gs-snowclient-na/precache-manifest.65211f41d101932af24cccba16c7da87.js"
+  "/gs-snowclient-na/precache-manifest.2a415594ae6b0e67f21eeb0a737efc3f.js"
 );
 
 self.addEventListener('message', (event) => {
