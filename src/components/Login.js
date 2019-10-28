@@ -7,6 +7,8 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import ButtonAppBar from './ButtonAppBar'
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
+import { toast } from 'react-toastify'
+import Error from '@material-ui/icons/Error'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -62,6 +64,7 @@ export default function Login(props) {
         }
         console.log('Authenticated', res);
       }, (rej) => {
+        toast.error(<div><Error /> Login failed!!</div>);
         setLoading(false)
         console.log(rej);
       });
@@ -117,7 +120,7 @@ export default function Login(props) {
               />
             </Grid>
             <Grid item xs={12} style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-              <Button style={{ width: "100%", margin: '0' }} disabled={loading ? "disabled" : ""} variant="contained" color="primary" size="large" className={classes.button} onClick={handleClick}>
+              <Button style={{ width: "100%", margin: '0' }} disabled={loading ? true : false} variant="contained" color="primary" size="large" className={classes.button} onClick={handleClick}>
                 Login
             </Button>
               {loading ?
