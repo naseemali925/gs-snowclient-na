@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import ButtonAppBar from './ButtonAppBar'
-import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
 import { toast } from 'react-toastify'
 import Error from '@material-ui/icons/Error'
@@ -49,6 +48,8 @@ export default function Login(props) {
         props.globalState.username = username;
         props.globalState.password = password;
         props.globalState.instanceId = instanceId;
+        toast.success(<div>Logged in!</div>);
+        setLoading(false)
         props.history.push('/dashboard')
       }
       Logger.log('Authenticated', res);
@@ -57,38 +58,6 @@ export default function Login(props) {
       setLoading(false)
       Logger.log("Error");
     }
-    // try {
-    //   const options = {
-    //     url: `https://${instanceId}.service-now.com/api/now/v2/table/sys_user?user_name=${username}`,
-    //     method: 'get',
-    //     auth: {
-    //       username: `${username}`,
-    //       password: `${password}`
-    //     }
-    //   };
-    //   axios(options).then((val) => {
-    //     setLoading(false)
-    //     var res = {
-    //       raw: val,
-    //       status: val.status
-    //     }
-    //     if (val.status === 200) {
-    //       props.globalState.setLoggedIn(true);
-    //       props.globalState.username = username;
-    //       props.globalState.password = password;
-    //       props.globalState.instanceId = instanceId;
-    //       props.history.push('/dashboard')
-    //     }
-    //     console.log('Authenticated', res);
-    //   }, (rej) => {
-    //     toast.error(<div><Error /> Login failed!!</div>);
-    //     setLoading(false)
-    //     console.log(rej);
-    //   });
-    // } catch (e) {
-    //   console.log(e)
-    // }
-
   }
 
   return (

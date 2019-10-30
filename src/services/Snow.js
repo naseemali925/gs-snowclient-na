@@ -38,10 +38,10 @@ class Snow {
     }
 
     getIncidents = () => {
-        this.incidentsPath = this.BASE + this.PATHS.INCIDENTS()
+        let incidentsPath = this.BASE + this.PATHS.INCIDENTS()
         return new Promise((resolve, reject) => {
             const options = {
-                url: this.incidentsPath,
+                url: incidentsPath,
                 method: 'get',
                 auth: {
                     username: `${GlobalState.username}`,

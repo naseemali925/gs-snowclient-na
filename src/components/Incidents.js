@@ -13,6 +13,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add'
+import Logger from '../services/Logger'
+import Snow from '../services/Snow'
 
 export default function Incidents(props) {
 
@@ -60,16 +62,11 @@ export default function Incidents(props) {
     });
     const loadIncidents = async () => {
         try {
-            let response = await Axios.get(`https://${instance}.service-now.com/api/now/table/incident?sysparm_limit=20&sysparm_query=active=true`, {
-                auth: {
-                    username: username,
-                    password: password
-                }
-            });
+            let response = await Snow.getIncidents();
             setState(Object.assign(response.data.result, {}, { columns: state.columns, data: response.data.result }));
-            // console.log(response.status, response.data.result);
+            Logger.log(response.status, response.data.result);
         } catch (e) {
-            console.log(e);
+            Logger.log(e);
         }
     }
     useEffect(() => {
