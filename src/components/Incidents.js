@@ -14,6 +14,8 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add'
 import Logger from '../services/Logger'
 import Snow from '../services/Snow'
+import Error from '@material-ui/icons/Error'
+import Success from '@material-ui/icons/CheckCircleOutline'
 
 export default function Incidents(props) {
 
@@ -85,13 +87,13 @@ export default function Incidents(props) {
                 Logger.log("Updated", response)
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleEditClose()
-                toast.success("Incident successfuly updated.")
+                toast.error(<span><Success /> Successfully updated the incident.</span>)
             } else {
                 handleEditClose()
-                toast.error("Some Error Occured While updated the incident")
+                toast.error(<span><Error /> Error updating the incident. Please try again later.</span>)
             }
         } catch (e) {
-            toast.error("Error Updating The Record. Please try again later.")
+            toast.error(<span><Error /> Error updating the record. Please try again later.</span>)
             Logger.log("Error", e);
         }
 
@@ -104,15 +106,15 @@ export default function Incidents(props) {
                 let uData = state.data.filter(e => e.sys_id !== toEdit.sys_id);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleDeleteClose()
-                toast.success("Successfully deleted the incident.")
+                toast.error(<span><Success /> Successfully deleted the incident.</span>)
                 Logger.log("Deleted", response.data);
             } else {
                 handleDeleteClose()
-                toast.error("Some error occured while deleting the incident!")
+                toast.error(<span><Error /> Error deleting the incident. Please try again later.</span>)
             }
         } catch (e) {
             handleDeleteClose()
-            toast.error("Error deleting the incident. Please try again later.")
+            toast.error(<span><Error /> Error deleting the incident. Please try again later.</span>)
             Logger.log("Error", e);
         }
     }
@@ -127,15 +129,15 @@ export default function Incidents(props) {
                 uData.unshift(response.data.result);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleAddClose()
-                toast.success(`Successfully added the incident with number ${response.data.result.number}`)
+                toast.error(<span><Success /> Successfully updated the incident. width number {response.data.result.number}</span>)
                 Logger.log("Added", response.data.result);
             } else {
                 handleAddClose()
-                toast.error("Some error occured while adding the incident!")
+                toast.error(<span><Error /> Error adding the incident. Please try again later.</span>)
             }
         } catch (e) {
             handleAddClose()
-            toast.error("Error adding the incident. Please try again later.")
+            toast.error(<span><Error /> Error adding the incident. Please try again later.</span>)
             Logger.log(e);
         }
 
