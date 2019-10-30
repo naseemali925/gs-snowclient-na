@@ -19,7 +19,7 @@ export default function Incidents(props) {
     const globalState = props.globalState;
     const username = globalState.username;
     const password = globalState.password;
-    const instance = globalState.instance;
+    const instance = globalState.instanceId;
     const [toEdit, setToEdit] = React.useState({});
     const [addOpen, setAddOpen] = React.useState(false);
     const handleAddOpen = () => {

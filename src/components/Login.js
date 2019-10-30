@@ -9,6 +9,8 @@ import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
 import { toast } from 'react-toastify'
 import Error from '@material-ui/icons/Error'
+import Snow from '../services/Snow'
+import Logger from '../services/Logger'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -41,36 +43,51 @@ export default function Login(props) {
     let password = document.getElementById('password').value;
     let instanceId = document.getElementById('instanceId').value;
     try {
-      const options = {
-        url: `https://${instanceId}.service-now.com/api/now/v2/table/sys_user?user_name=${username}`,
-        method: 'get',
-        auth: {
-          username: `${username}`,
-          password: `${password}`
-        }
-      };
-      axios(options).then((val) => {
-        setLoading(false)
-        var res = {
-          raw: val,
-          status: val.status
-        }
-        if (val.status === 200) {
-          props.globalState.setLoggedIn(true);
-          props.globalState.username = username;
-          props.globalState.password = password;
-          props.globalState.instance = instanceId;
-          props.history.push('/dashboard')
-        }
-        console.log('Authenticated', res);
-      }, (rej) => {
-        toast.error(<div><Error /> Login failed!!</div>);
-        setLoading(false)
-        console.log(rej);
-      });
+      let res = await Snow.login(username, password, instanceId)
+      if (res.status === 200) {
+        props.globalState.setLoggedIn(true);
+        props.globalState.username = username;
+        props.globalState.password = password;
+        props.globalState.instanceId = instanceId;
+        props.history.push('/dashboard')
+      }
+      Logger.log('Authenticated', res);
     } catch (e) {
-      console.log(e)
+      toast.error(<div><Error /> Login failed!!</div>);
+      setLoading(false)
+      Logger.log("Error");
     }
+    // try {
+    //   const options = {
+    //     url: `https://${instanceId}.service-now.com/api/now/v2/table/sys_user?user_name=${username}`,
+    //     method: 'get',
+    //     auth: {
+    //       username: `${username}`,
+    //       password: `${password}`
+    //     }
+    //   };
+    //   axios(options).then((val) => {
+    //     setLoading(false)
+    //     var res = {
+    //       raw: val,
+    //       status: val.status
+    //     }
+    //     if (val.status === 200) {
+    //       props.globalState.setLoggedIn(true);
+    //       props.globalState.username = username;
+    //       props.globalState.password = password;
+    //       props.globalState.instanceId = instanceId;
+    //       props.history.push('/dashboard')
+    //     }
+    //     console.log('Authenticated', res);
+    //   }, (rej) => {
+    //     toast.error(<div><Error /> Login failed!!</div>);
+    //     setLoading(false)
+    //     console.log(rej);
+    //   });
+    // } catch (e) {
+    //   console.log(e)
+    // }
 
   }
 

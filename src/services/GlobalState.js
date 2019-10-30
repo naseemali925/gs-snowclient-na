@@ -1,11 +1,14 @@
-
-export default class GlobalState {
+class GlobalState {
 
     constructor(loggedIn) {
-        this.loggedIn = loggedIn;
-        this.username = undefined;
-        this.password = undefined;
-        this.instance = undefined;
+        if (!GlobalState.instance) {
+            this.loggedIn = loggedIn;
+            this.username = undefined;
+            this.password = undefined;
+            this.instanceId = undefined;
+            GlobalState.instance = this;
+        }
+        return GlobalState.instance
     }
 
     setLoggedIn = (loggedIn) => {
@@ -16,3 +19,5 @@ export default class GlobalState {
         return this.loggedIn;
     }
 }
+
+export default new GlobalState();
