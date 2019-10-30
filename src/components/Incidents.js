@@ -17,7 +17,7 @@ import Snow from '../services/Snow'
 import Error from '@material-ui/icons/Error'
 import Success from '@material-ui/icons/CheckCircleOutline'
 
-export default function Incidents(props) {
+export default function Incidents() {
 
     const [toEdit, setToEdit] = React.useState({});
     const [addOpen, setAddOpen] = React.useState(false);

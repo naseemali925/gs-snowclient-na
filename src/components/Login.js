@@ -48,15 +48,15 @@ export default function Login(props) {
         props.globalState.username = username;
         props.globalState.password = password;
         props.globalState.instanceId = instanceId;
-        toast.success(<div>Logged in!</div>);
+        toast.success(<span>Logged in!</span>);
         setLoading(false)
         props.history.push('/dashboard')
       }
       Logger.log('Authenticated', res);
     } catch (e) {
-      toast.error(<div><Error /> Login failed!!</div>);
+      toast.error(<span><Error /> Login failed!!</span>);
       setLoading(false)
-      Logger.log("Error");
+      Logger.log("Error", e);
     }
   }
 
