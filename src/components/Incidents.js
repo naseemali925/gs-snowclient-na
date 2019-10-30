@@ -77,16 +77,7 @@ export default function Incidents(props) {
         try {
             let sdesc = document.getElementById('sdesc').value;
             let desc = document.getElementById('desc').value;
-            let response = await Axios.put(`https://${instance}.service-now.com/api/now/table/incident/${toEdit.sys_id}`,
-                {
-                    short_description: sdesc,
-                    description: desc
-                }, {
-                auth: {
-                    username: username,
-                    password: password
-                }
-            })
+            let response = await Snow.updateIncident(sdesc, desc, toEdit.sys_id);
             if (response && response.status === 200) {
                 let uData = state.data.map(e => {
                     if (e.sys_id === toEdit.sys_id) {
@@ -94,7 +85,7 @@ export default function Incidents(props) {
                     }
                     return e;
                 });
-                // console.log("Updated", response)
+                Logger.log("Updated", response)
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleEditClose()
                 toast.success("Incident successfuly updated.")
@@ -104,7 +95,9 @@ export default function Incidents(props) {
             }
         } catch (e) {
             toast.error("Error Updating The Record. Please try again later.")
+            Logger.log("Error", e);
         }
+
     }
 
     const handleDelete = async () => {
@@ -136,24 +129,14 @@ export default function Incidents(props) {
         try {
             let sdesc = document.getElementById('asdesc').value;
             let desc = document.getElementById('adesc').value;
-            let response = await Axios.post(`https://${instance}.service-now.com/api/now/table/incident`,
-                {
-                    short_description: sdesc,
-                    description: desc
-                },
-                {
-                    auth: {
-                        username: username,
-                        password: password
-                    }
-                })
-            // console.log("Add response", response)
+            let response = await Snow.addIncident(sdesc, desc)
             if (response && response.status === 201) {
                 let uData = state.data;
                 uData.unshift(response.data.result);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleAddClose()
                 toast.success(`Successfully added the incident with number ${response.data.result.number} and sys_id ${response.data.result.sys_id}`)
+                Logger.log("Added", response.data.result);
             } else {
                 handleAddClose()
                 toast.error("Some error occured while adding the incident!")
@@ -161,7 +144,9 @@ export default function Incidents(props) {
         } catch (e) {
             handleAddClose()
             toast.error("Error adding the incident. Please try again later.")
+            Logger.log(e);
         }
+
     }
 
     return (
