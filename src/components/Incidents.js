@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import MaterialTable, { MTableToolbar } from 'material-table';
-import Axios from 'axios';
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 import Button from '@material-ui/core/Button'
@@ -18,37 +17,10 @@ import Snow from '../services/Snow'
 
 export default function Incidents(props) {
 
-    const globalState = props.globalState;
-    const username = globalState.username;
-    const password = globalState.password;
-    const instance = globalState.instanceId;
     const [toEdit, setToEdit] = React.useState({});
     const [addOpen, setAddOpen] = React.useState(false);
-    const handleAddOpen = () => {
-        setAddOpen(true);
-    };
-
-    const handleAddClose = () => {
-        setAddOpen(false);
-    };
     const [editOpen, setEditOpen] = React.useState(false);
-
-    const handleEditOpen = () => {
-        setEditOpen(true);
-    };
-
-    const handleEditClose = () => {
-        setEditOpen(false);
-    };
     const [deleteOpen, setDeleteOpen] = React.useState(false);
-
-    const handleDeleteOpen = () => {
-        setDeleteOpen(true);
-    };
-
-    const handleDeleteClose = () => {
-        setDeleteOpen(false);
-    };
     const [state, setState] = useState({
         columns: [
             { title: 'Number', field: 'number' },
@@ -60,11 +32,36 @@ export default function Incidents(props) {
 
         ],
     });
+
+    const handleAddOpen = () => {
+        setAddOpen(true);
+    };
+
+    const handleAddClose = () => {
+        setAddOpen(false);
+    };
+
+    const handleEditOpen = () => {
+        setEditOpen(true);
+    };
+
+    const handleEditClose = () => {
+        setEditOpen(false);
+    };
+
+    const handleDeleteOpen = () => {
+        setDeleteOpen(true);
+    };
+
+    const handleDeleteClose = () => {
+        setDeleteOpen(false);
+    };
+
     const loadIncidents = async () => {
         try {
             let response = await Snow.getIncidents();
             setState(Object.assign(response.data.result, {}, { columns: state.columns, data: response.data.result }));
-            Logger.log(response.status, response.data.result);
+            Logger.log("Loaded", response.data.result);
         } catch (e) {
             Logger.log(e);
         }
@@ -102,19 +99,13 @@ export default function Incidents(props) {
 
     const handleDelete = async () => {
         try {
-            let response = await Axios.delete(`https://${instance}.service-now.com/api/now/table/incident/${toEdit.sys_id}`,
-                {
-                    auth: {
-                        username: username,
-                        password: password
-                    }
-                }, {})
-            // console.log("Delete response", response)
+            let response = await Snow.deleteIncident(toEdit.sys_id);
             if (response && response.status === 204) {
                 let uData = state.data.filter(e => e.sys_id !== toEdit.sys_id);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleDeleteClose()
                 toast.success("Successfully deleted the incident.")
+                Logger.log("Deleted", response.data);
             } else {
                 handleDeleteClose()
                 toast.error("Some error occured while deleting the incident!")
@@ -122,6 +113,7 @@ export default function Incidents(props) {
         } catch (e) {
             handleDeleteClose()
             toast.error("Error deleting the incident. Please try again later.")
+            Logger.log("Error", e);
         }
     }
 
@@ -135,7 +127,7 @@ export default function Incidents(props) {
                 uData.unshift(response.data.result);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleAddClose()
-                toast.success(`Successfully added the incident with number ${response.data.result.number} and sys_id ${response.data.result.sys_id}`)
+                toast.success(`Successfully added the incident with number ${response.data.result.number}`)
                 Logger.log("Added", response.data.result);
             } else {
                 handleAddClose()
@@ -163,8 +155,6 @@ export default function Incidents(props) {
                         onClick: (event, rowData) => {
                             setToEdit(Object.assign(toEdit, {}, rowData));
                             handleEditOpen();
-                            // console.log("ToEdit", toEdit)
-                            // alert("You edited " + rowData.number)
                         }
                     },
                     {
@@ -172,8 +162,7 @@ export default function Incidents(props) {
                         tooltip: 'Delete incident',
                         onClick: (event, rowData) => {
                             setToEdit(Object.assign(toEdit, {}, rowData));
-                            handleDeleteOpen();
-                            // alert("You edited " + rowData.number)
+                            handleDeleteOpen()
                         }
                     }
                 ]}

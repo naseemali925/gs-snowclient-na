@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
 function App(aprops) {
-  // console.log(aprops.globalState)
   return (
     <HashRouter basename="/">
       <div className="App">

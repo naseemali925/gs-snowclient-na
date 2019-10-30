@@ -11,6 +11,7 @@ class Snow {
                 INCIDENTS: () => '/table/incident?sysparm_limit=20&sysparm_query=active=true',
                 UPDATE_INCIDENT: (sys_id) => `/table/incident/${sys_id}`,
                 ADD_INCIDENT: () => '/table/incident',
+                DELETE_INCIDENT: (sys_id) => `/table/incident/${sys_id}`,
             }
             Snow.instance = this;
         }
@@ -93,6 +94,25 @@ class Snow {
                 data: {
                     short_description: sdesc,
                     description: desc
+                }
+            };
+            Axios(options).then((val) => {
+                resolve(val);
+            }, (rej) => {
+                reject(rej);
+            });
+        })
+    }
+
+    deleteIncident = async (sys_id) => {
+        let path = this.BASE + this.PATHS.DELETE_INCIDENT(sys_id)
+        return new Promise((resolve, reject) => {
+            const options = {
+                url: path,
+                method: 'delete',
+                auth: {
+                    username: `${GlobalState.username}`,
+                    password: `${GlobalState.password}`
                 }
             };
             Axios(options).then((val) => {
