@@ -6,7 +6,7 @@ import GlobalState from '../services/GlobalState'
 export default function Dashboard(props) {
 
     const loggedIn = GlobalState.isLoggedIn();
-    if (!loggedIn) window.history.push('/');
+    if (!loggedIn) props.history.push('/');
     return (
         <React.Fragment>
             <ButtonAppBar />

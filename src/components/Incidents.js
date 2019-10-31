@@ -76,6 +76,10 @@ export default function Incidents() {
         try {
             const sdesc = document.getElementById('sdesc').value;
             const desc = document.getElementById('desc').value;
+            if(!sdesc||!desc){
+                toast.error(<span><Error /> One or more field(s) are empty. Please try again.</span>)
+                return;
+            }
             const response = await Snow.updateIncident(sdesc, desc, toEdit.sys_id);
             if (response && response.status === 200) {
                 const uData = state.data.map(e => {
@@ -87,7 +91,7 @@ export default function Incidents() {
                 Logger.log("Updated", response)
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleEditClose()
-                toast.error(<span><Success /> Successfully updated the incident.</span>)
+                toast.success(<span><Success /> Successfully updated the incident.</span>)
             } else {
                 handleEditClose()
                 toast.error(<span><Error /> Error updating the incident. Please try again later.</span>)
@@ -106,7 +110,7 @@ export default function Incidents() {
                 const uData = state.data.filter(e => e.sys_id !== toEdit.sys_id);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleDeleteClose()
-                toast.error(<span><Success /> Successfully deleted the incident.</span>)
+                toast.success(<span><Success /> Successfully deleted the incident.</span>)
                 Logger.log("Deleted", response.data);
             } else {
                 handleDeleteClose()
@@ -123,13 +127,17 @@ export default function Incidents() {
         try {
             const sdesc = document.getElementById('asdesc').value;
             const desc = document.getElementById('adesc').value;
+            if(!sdesc||!desc){
+                toast.error(<span><Error /> One or more field(s) are empty. Please try again.</span>)
+                return;
+            }
             const response = await Snow.addIncident(sdesc, desc)
             if (response && response.status === 201) {
                 const uData = state.data;
                 uData.unshift(response.data.result);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleAddClose()
-                toast.error(<span><Success /> Successfully updated the incident. width number {response.data.result.number}</span>)
+                toast.success(<span><Success /> Successfully updated the incident. width number {response.data.result.number}</span>)
                 Logger.log("Added", response.data.result);
             } else {
                 handleAddClose()

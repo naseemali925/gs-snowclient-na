@@ -31,17 +31,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Login() {
+export default function Login(props) {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const loggedIn = GlobalState.isLoggedIn();
-  if (loggedIn) window.history.push('/dashboard');
+  if (loggedIn) props.history.push('/dashboard');
   async function handleClick(e) {
     e.preventDefault();
     setLoading(true);
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const instanceId = document.getElementById('instanceId').value;
+    if(!username||!password||!instanceId){
+        toast.error(<span><Error /> One or more field(s) are empty. Please try again.</span>)
+        setLoading(false);
+        return;
+    }
     try {
       const res = await Snow.login(username, password, instanceId)
       if (res.status === 200) {
@@ -51,7 +56,7 @@ export default function Login() {
         GlobalState.instanceId = instanceId;
         toast.success(<span>Logged in!</span>);
         setLoading(false)
-        window.history.push('/dashboard')
+        props.history.push('/dashboard')
       }
       Logger.log('Authenticated', res);
     } catch (err) {

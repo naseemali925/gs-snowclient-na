@@ -5,6 +5,7 @@ import 'typeface-roboto';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import GlobalState from './services/GlobalState'
+
 ReactDOM.render(<App globalState={GlobalState} />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
