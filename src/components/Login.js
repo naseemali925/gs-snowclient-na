@@ -4,12 +4,13 @@ import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import ButtonAppBar from './ButtonAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { toast } from 'react-toastify'
 import Error from '@material-ui/icons/Error'
+import ButtonAppBar from './ButtonAppBar'
 import Snow from '../services/Snow'
 import Logger from '../services/Logger'
+import GlobalState from '../services/GlobalState'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -30,33 +31,33 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Login(props) {
+export default function Login() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  let loggedIn = props.globalState.isLoggedIn();
-  if (loggedIn) props.history.push('/dashboard');
+  const loggedIn = GlobalState.isLoggedIn();
+  if (loggedIn) window.history.push('/dashboard');
   async function handleClick(e) {
     e.preventDefault();
     setLoading(true);
-    let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
-    let instanceId = document.getElementById('instanceId').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const instanceId = document.getElementById('instanceId').value;
     try {
-      let res = await Snow.login(username, password, instanceId)
+      const res = await Snow.login(username, password, instanceId)
       if (res.status === 200) {
-        props.globalState.setLoggedIn(true);
-        props.globalState.username = username;
-        props.globalState.password = password;
-        props.globalState.instanceId = instanceId;
+        GlobalState.setLoggedIn(true);
+        GlobalState.username = username;
+        GlobalState.password = password;
+        GlobalState.instanceId = instanceId;
         toast.success(<span>Logged in!</span>);
         setLoading(false)
-        props.history.push('/dashboard')
+        window.history.push('/dashboard')
       }
       Logger.log('Authenticated', res);
-    } catch (e) {
+    } catch (err) {
       toast.error(<span><Error /> Login failed!!</span>);
       setLoading(false)
-      Logger.log("Error", e);
+      Logger.log("Error", err);
     }
   }
 
@@ -106,7 +107,7 @@ export default function Login(props) {
               />
             </Grid>
             <Grid item xs={12} style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-              <Button style={{ width: "100%", margin: '0' }} disabled={loading ? true : false} variant="contained" color="primary" size="large" className={classes.button} onClick={handleClick}>
+              <Button style={{ width: "100%", margin: '0' }} disabled={loading} variant="contained" color="primary" size="large" className={classes.button} onClick={handleClick}>
                 Login
             </Button>
               {loading ?

@@ -12,10 +12,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add'
+import Success from '@material-ui/icons/CheckCircleOutline'
+import Error from '@material-ui/icons/Error'
 import Logger from '../services/Logger'
 import Snow from '../services/Snow'
-import Error from '@material-ui/icons/Error'
-import Success from '@material-ui/icons/CheckCircleOutline'
 
 export default function Incidents() {
 
@@ -61,7 +61,7 @@ export default function Incidents() {
 
     const loadIncidents = async () => {
         try {
-            let response = await Snow.getIncidents();
+            const response = await Snow.getIncidents();
             setState(Object.assign(response.data.result, {}, { columns: state.columns, data: response.data.result }));
             Logger.log("Loaded", response.data.result);
         } catch (e) {
@@ -74,11 +74,11 @@ export default function Incidents() {
 
     const handleUpdate = async () => {
         try {
-            let sdesc = document.getElementById('sdesc').value;
-            let desc = document.getElementById('desc').value;
-            let response = await Snow.updateIncident(sdesc, desc, toEdit.sys_id);
+            const sdesc = document.getElementById('sdesc').value;
+            const desc = document.getElementById('desc').value;
+            const response = await Snow.updateIncident(sdesc, desc, toEdit.sys_id);
             if (response && response.status === 200) {
-                let uData = state.data.map(e => {
+                const uData = state.data.map(e => {
                     if (e.sys_id === toEdit.sys_id) {
                         return response.data.result
                     }
@@ -101,9 +101,9 @@ export default function Incidents() {
 
     const handleDelete = async () => {
         try {
-            let response = await Snow.deleteIncident(toEdit.sys_id);
+            const response = await Snow.deleteIncident(toEdit.sys_id);
             if (response && response.status === 204) {
-                let uData = state.data.filter(e => e.sys_id !== toEdit.sys_id);
+                const uData = state.data.filter(e => e.sys_id !== toEdit.sys_id);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleDeleteClose()
                 toast.error(<span><Success /> Successfully deleted the incident.</span>)
@@ -121,11 +121,11 @@ export default function Incidents() {
 
     const handleAdd = async () => {
         try {
-            let sdesc = document.getElementById('asdesc').value;
-            let desc = document.getElementById('adesc').value;
-            let response = await Snow.addIncident(sdesc, desc)
+            const sdesc = document.getElementById('asdesc').value;
+            const desc = document.getElementById('adesc').value;
+            const response = await Snow.addIncident(sdesc, desc)
             if (response && response.status === 201) {
-                let uData = state.data;
+                const uData = state.data;
                 uData.unshift(response.data.result);
                 setState(Object.assign(state.data, {}, { columns: state.columns, data: uData }));
                 handleAddClose()
@@ -179,7 +179,7 @@ export default function Incidents() {
                             />
                             <Chip
                                 style={{ marginLeft: "16px", marginRight: "16px", marginTop: "16px" }}
-                                label={'System Id: ' + rowData.sys_id}
+                                label={`System Id: ${rowData.sys_id}`}
                                 clickable
                                 color="secondary"
                             />

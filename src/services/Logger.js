@@ -1,7 +1,7 @@
 class Logger {
     log = (...data) => {
-        data.forEach((item) => {
-            console.log(item);
+        data.forEach(() => {
+            // console.log(item);
         })
     }
 }

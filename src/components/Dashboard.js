@@ -1,11 +1,12 @@
 import React from 'react'
 import ButtonAppBar from './ButtonAppBar'
 import Incidents from './Incidents'
+import GlobalState from '../services/GlobalState'
 
 export default function Dashboard(props) {
 
-    const loggedIn = props.globalState.isLoggedIn();
-    if (!loggedIn) props.history.push('/');
+    const loggedIn = GlobalState.isLoggedIn();
+    if (!loggedIn) window.history.push('/');
     return (
         <React.Fragment>
             <ButtonAppBar />

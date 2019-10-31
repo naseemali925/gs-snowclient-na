@@ -40,3 +40,12 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 (Please change GitHub pages URL for your repository so it can be hosted on your GitHub pages. )
 3. Now visit https://naseemali925.github.io/gs-snowclient-na or your GitHub pages URL.
 4. Use your Service Now instance credentials to log in.
+
+## Technologies used
+- [React](https://reactjs.org/)
+- [Axios](https://www.npmjs.com/package/axios)
+- [Material-ui](https://material-ui.com/)
+- [Material-table](https://material-table.com/#/)
+- [ESLint](https://eslint.org/)
+- [GitHub Pages](https://pages.github.com/)
+- [React-toastify](https://www.npmjs.com/package/react-toastify)

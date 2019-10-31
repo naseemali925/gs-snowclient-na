@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import GlobalState from './GlobalState'
+
 class Snow {
     constructor() {
         if (!Snow.instance) {
@@ -9,9 +10,9 @@ class Snow {
             this.PATHS = {
                 LOGIN: (username) => `/v2/table/sys_user?user_name=${username}`,
                 INCIDENTS: () => '/table/incident?sysparm_limit=20&sysparm_query=active=true',
-                UPDATE_INCIDENT: (sys_id) => `/table/incident/${sys_id}`,
+                UPDATE_INCIDENT: (sysId) => `/table/incident/${sysId}`,
                 ADD_INCIDENT: () => '/table/incident',
-                DELETE_INCIDENT: (sys_id) => `/table/incident/${sys_id}`,
+                DELETE_INCIDENT: (sysId) => `/table/incident/${sysId}`,
             }
             Snow.instance = this;
         }
@@ -21,7 +22,7 @@ class Snow {
 
     login = async (username, password, instanceId) => {
         this.BASE = `https://${instanceId}.service-now.com/api/now`;
-        let path = this.BASE + this.PATHS.LOGIN(username);
+        const path = this.BASE + this.PATHS.LOGIN(username);
         return new Promise((resolve, reject) => {
             const options = {
                 url: path,
@@ -40,7 +41,7 @@ class Snow {
     }
 
     getIncidents = async () => {
-        let path = this.BASE + this.PATHS.INCIDENTS()
+        const path = this.BASE + this.PATHS.INCIDENTS()
         return new Promise((resolve, reject) => {
             const options = {
                 url: path,
@@ -58,8 +59,8 @@ class Snow {
         })
     }
 
-    updateIncident = async (sdesc, desc, sys_id) => {
-        let path = this.BASE + this.PATHS.UPDATE_INCIDENT(sys_id)
+    updateIncident = async (sdesc, desc, sysId) => {
+        const path = this.BASE + this.PATHS.UPDATE_INCIDENT(sysId)
         return new Promise((resolve, reject) => {
             const options = {
                 url: path,
@@ -82,7 +83,7 @@ class Snow {
     }
 
     addIncident = async (sdesc, desc) => {
-        let path = this.BASE + this.PATHS.ADD_INCIDENT()
+        const path = this.BASE + this.PATHS.ADD_INCIDENT()
         return new Promise((resolve, reject) => {
             const options = {
                 url: path,
@@ -104,8 +105,8 @@ class Snow {
         })
     }
 
-    deleteIncident = async (sys_id) => {
-        let path = this.BASE + this.PATHS.DELETE_INCIDENT(sys_id)
+    deleteIncident = async (sysId) => {
+        const path = this.BASE + this.PATHS.DELETE_INCIDENT(sysId)
         return new Promise((resolve, reject) => {
             const options = {
                 url: path,
